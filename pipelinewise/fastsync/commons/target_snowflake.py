@@ -15,8 +15,9 @@ class FastSyncTargetSnowflake:
         self.transformation_config = transformation_config
         self.s3 = boto3.client(
             "s3",
-            aws_access_key_id=self.connection_config["aws_access_key_id"],
-            aws_secret_access_key=self.connection_config["aws_secret_access_key"],
+            aws_access_key_id=self.connection_config.get("aws_access_key_id"),
+            aws_secret_access_key=self.connection_config.get("aws_secret_access_key"),
+            aws_session_token=self.connection_config.get("aws_session_token"),
         )
 
     def open_connection(self):
@@ -135,7 +136,14 @@ class FastSyncTargetSnowflake:
             """.format(
                 target_schema, target_table, self.connection_config["stage"], s3_key
             )
-            self.query(sql)
+
+        elif aws_access_key_id is None or aws_secret_access_key is None:
+            sql = """COPY INTO {}.{} FROM @{}/{}
+                FILE_FORMAT = (type='CSV' escape='\\x1e' escape_unenclosed_field='\\x1e' field_optionally_enclosed_by='\"'
+                COMPRESSION='GZIP' BINARY_FORMAT='HEX')
+            """.format(
+                target_schema, target_table, self.connection_config["stage"], s3_key
+            )
 
         else:
             sql = """COPY INTO {}.{} FROM 's3://{}/{}'
@@ -149,7 +157,7 @@ class FastSyncTargetSnowflake:
                 aws_access_key_id,
                 aws_secret_access_key,
             )
-            self.query(sql)
+        self.query(sql)
 
         utils.log("SNOWFLAKE - Deleting {} from S3...".format(s3_key))
         self.s3.delete_object(Bucket=bucket, Key=s3_key)
