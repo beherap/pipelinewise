@@ -21,7 +21,7 @@ setup(
         "argparse==1.4.0",
         "botocore==1.13.50",
         "tabulate==0.8.6",
-        "PyYAML==5.1.0",
+        "PyYAML==5.4",
         "jsonschema==3.0.1",
         "ansible==2.9.2",
         "joblib==0.14.1",
