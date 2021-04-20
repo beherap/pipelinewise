@@ -23,7 +23,7 @@ setup(
         "tabulate==0.8.6",
         "PyYAML==5.1.0",
         "jsonschema==3.0.1",
-        "ansible==2.9.2",
+        "ansible==2.9.20",
         "joblib==0.14.1",
         "attrs==17.4.0",
         "idna==2.8",
