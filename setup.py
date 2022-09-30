@@ -24,7 +24,7 @@ setup(
         "PyYAML==5.1.0",
         "jsonschema==3.0.1",
         "ansible==2.9.2",
-        "joblib==0.14.1",
+        "joblib==1.2.0",
         "attrs==17.4.0",
         "idna==2.8",
         "PyMySQL==0.9.3",
